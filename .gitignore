@@ -1,0 +1,11 @@
+.env
+/public/ArchivosAlumnos
+/public/ArchivosDocentes
+/vendor
+/.idea
+/storage
+/public/hot
+/public/storage
+/node_modules
+.idea/*
+

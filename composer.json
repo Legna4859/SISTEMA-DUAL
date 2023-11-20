@@ -1,0 +1,58 @@
+{
+    "name": "laravel/laravel",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "^7.1.3",
+        "laravel/framework": "5.6.*",
+        "codedge/laravel-fpdf": "^1.2",
+        "anouar/fpdf": "^1.0",
+        "maatwebsite/excel": "^3.1",
+        "barryvdh/laravel-dompdf": "0.8.2",
+        "filp/whoops": "^2.3",
+        "jenssegers/date": "^3.5",
+        "nesbot/carbon": "2.20.0 as 1.34.0",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0",
+        "fideloper/proxy": "^4.2",
+        "phpoffice/phpspreadsheet": "^1.10",
+        "symfony/translation": "4.3.8",
+        "laravel/tinker": "^1.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "phpoffice/phpexcel": "^1.8"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "1.0",
+        "phpunit/phpunit": "~5.0",
+        "symfony/css-selector": "3.1.*",
+        "symfony/dom-crawler": "3.1.*"
+    },
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "php artisan key:generate"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
+    },"_comment": "\"codedge/laravel-fpdf\": \"^1.2\", libreria para pdf"
+
+
+}

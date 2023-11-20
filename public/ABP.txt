@@ -1,0 +1,27 @@
+ABP DE GRAFICACIÓN.
+COMPETENCIA A DESARROLLAR: Diseña e implementa modelos gráficos para enriquecer visualmente software diverso de aplicación en entornos de programación web, móvil y stand-alone, con base al trazo, manipulación, iluminación, sombreado y animación de objetos bidimensionales y tridimensionales.
+
+1.- PLANTEAMIENTO DEL PROBLEMA: 
+El Tecnológico de Estudios Superiores de Valle de Bravo surge la necesidad de contar con un diseño de la institución en 3D para llevar a cabo el promocional. Derivado de esto se pretende crear un ambiente de  entorno virtual para que los usuarios interesados a navegar dentro de esta aplicación identifiquen las diversas áreas del TESVB como lo son: edificios, áreas deportivas, cafetería, biblioteca, estacionamientos y laboratorios.
+
+2.- NOMBRE DEL PROYECTO: “TESVB VIRTUAL”
+3.- NOMBRE CON MARKETING: “VIAJA AL TESVB EN 3D”
+4.- OBJETIVO:
+Desarrollar un modelo a escala en 3D del Tecnológico de Estudios Superiores de Valle de Bravo mediante un lenguaje de programación orientado a diseñadores para poder conocer el entorno en tercera dimensión.
+5.- ENFOQUE INTERDISCIPLINARIO:
+Ingeniería Económica: Para el desarrollo del plan de negocios del proyecto.
+Sistemas Programables: Programación y configuración de la interfaz.
+Gestión de Proyectos de Software: Investigación de campo, estudio de factibilidad, Metodología y usabilidad del desarrollo del sistema.
+Taller de Investigación I: Documentación del sistema.
+Conmutación y Enrutamiento de Redes de Datos: Configuración del servidor y nodos.
+6.- TIEMPO APROXIMADO DE REALIZACIÓN: 
+1semestre
+
+
+7.- CRONOGRAMA DE ACTIVIDADES:
+Etapa I. Análisis del proyecto, estudio de factibilidad e investigación de campo.
+Etapa II. Diseño del sistema y de la base de datos.
+Etapa III. Programación de interfaz.
+Etapa IV.  Diseño de la conectividad. 
+Etapa V.  Implementación y pruebas.
+Etapa VI. Evaluación
