@@ -536,6 +536,7 @@ class Dual_Validar_Carga_Academica_Alumno extends Controller
                 if ($calificacion->calificacion<70 )
                 {
                     $promedio_general++;
+                    //dd($promedio_general);
                 }
                 $unidades_evaluadas++;
                 $suma_unidades+=$calificacion->calificacion>=70 ? $calificacion->calificacion : 0;
@@ -553,6 +554,7 @@ class Dual_Validar_Carga_Academica_Alumno extends Controller
             $dat_materia['esc_alumno']=$esc_alumno;
             $dat_materia["calificaciones"]=$array_calificaciones;
             array_push($array_materias,$dat_materia);
+            //dd($dat_materia["calificaciones"]);
         }
 
         return view('duales.Mentor_Dual_Calificar.calificar_estudiante_dual',compact('mentor','profesores','id_alumno','id_periodo','array_materias','mayor_unidades','nombre_alumno','calificar_dual'));
@@ -577,27 +579,13 @@ class Dual_Validar_Carga_Academica_Alumno extends Controller
             $dat_cal['id_carga_academica']=$id_carga_academica;
             array_push($array_cali,$dat_cal);
         }
-        // dd($array_cali);
+        //dd($array_cali);
         return view('duales.Jefe_Dual_Calificar.calificar_alumnnos_duales',compact('array_cali','id_carga_academica','unidades'));
     }
 
     public function terminar_calificar_duales_actuales(Request $request,$id_alumno,$id_periodo){
-        //dd($request);
-        /*$actualizar = DB:: table('cal_duales_actuales')
-            ->update(['id_periodo'=>$id_periodo,
-                'id_alumno' => $id_alumno,
-                'id_estado' =>1,
-            ]);
-        return back();
-        $mentor=$request->get('mentor');
-        $insertar = DB:: table('cal_duales_actuales')
-            ->insert(['id_periodo'=>$id_periodo,
-                'id_alumno' => $id_alumno,
-                'id_estado' =>1,
-                'id_personal' =>$mentor
-            ]);*/
 
-            $actualizar = DB::table('cal_duales_actuales')
+        $actualizar = DB::table('cal_duales_actuales')
         ->where(['id_alumno' => $id_alumno, 'id_periodo' => $id_periodo])
         ->update([
             'id_estado' => 1,

@@ -41,7 +41,8 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
         AND gnral_reticulas.id_carrera IN (' . $carreras->pluck('id_carrera')->implode(',') . ')
         AND eva_carga_academica.id_status_materia = 1 
         AND eva_carga_academica.id_periodo = ' . $id_periodo . '
-        AND (eva_validacion_de_cargas.estado_validacion IN (2, 8, 10) OR eva_validacion_de_cargas.estado_validacion IS NULL)
+        AND eva_validacion_de_cargas.estado_validacion= 8
+        AND eva_carga_academica.id_materia = ' . $id_materia . '
         GROUP BY gnral_alumnos.id_alumno, gnral_alumnos.cuenta, gnral_alumnos.nombre, gnral_alumnos.apaterno, gnral_alumnos.amaterno
         ORDER BY gnral_alumnos.apaterno, gnral_alumnos.amaterno, gnral_alumnos.nombre ASC');
         //dd($alumnos);
@@ -75,31 +76,71 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
         AND eva_status_materia.id_status_materia = 1
         GROUP BY gnral_materias.id_materia');
 
-        $array_mat = [];
-        foreach ($materia_seleccionada as $materia) {
+        $array_materias=array();
+        $mayor_unidades=0;
+        $esc_alumno=false;
+        foreach ($materia_seleccionada as $dat_alumno)
+        {
+            $esc_alumno=false;
+            $suma_unidades=0;
+            $unidades_evaluadas=0;
+            $promedio_general=0;
+            $dat_materia['id_carga_academica']=$dat_alumno->id_carga_academica;
+            $dat_materia['id_materia']=$dat_alumno->id_materia;
+            $dat_materia['curso']=$dat_alumno->nombre_curso;
+            $dat_materia["materia"]=$dat_alumno->materias;
+            $dat_materia["unidades"]=$dat_alumno->unidades;
+            $dat_materia["creditos"]=$dat_alumno->creditos;
+            $mayor_unidades= $mayor_unidades > $dat_alumno->unidades ? $mayor_unidades : $dat_alumno->unidades;
+            $array_calificaciones=array();
+            $calificaciones=DB::select('SELECT * FROM cal_evaluaciones
+                      WHERE id_carga_academica='.$dat_alumno->id_carga_academica.'
+                      ORDER BY cal_evaluaciones.id_unidad');
+            $calificaciones != null ? $unidades_evaluadas=0 : $unidades_evaluadas=1;
+            foreach ($calificaciones as $calificacion)
+            {
+                $dat_calificaciones['id_evaluacion']=$calificacion->id_evaluacion;
+                $dat_calificaciones['calificacion']=$calificacion->calificacion;
+                $dat_calificaciones['id_unidad']=$calificacion->id_unidad;
+                if ($calificacion->calificacion<70 || $calificacion->esc==1)
+                {
+                    $esc_alumno=true;
+                }
+                if ($calificacion->calificacion<70 )
+                {
+                    $promedio_general++;
+                    //dd($promedio_general);
+                }
+                $unidades_evaluadas++;
+                $suma_unidades+=$calificacion->calificacion>=70 ? $calificacion->calificacion : 0;
+                array_push($array_calificaciones,$dat_calificaciones);
+            }
+            if($promedio_general == 0){
 
-            $datos_materias['id_materia'] = $materia->id_materia;
-            $datos_materias['clave'] = $materia->clave;
-            $datos_materias['nombre_materia'] = $materia->materias;
-            $datos_materias['grupo'] = $materia->grupo;
-            $datos_materias['creditos'] = $materia->creditos;
-            $datos_materias['te'] = 'TE';
-            $datos_materias['unidades'] = $materia->unidades;
-            $materia_seleccionada++;
-            $datos_materias['status'] = 1;
-            array_push($array_mat, $datos_materias);
+                $dat_materia['promedio'] = intval(round($suma_unidades / $unidades_evaluadas) + 0);
+
+            }
+            else {
+                $dat_materia['promedio']=0;
+            }
+            //  $dat_materia['promedio']=intval(round($suma_unidades/$unidades_evaluadas)+0);
+            $dat_materia['esc_alumno']=$esc_alumno;
+            $dat_materia["calificaciones"]=$array_calificaciones;
+            array_push($array_materias,$dat_materia);
+            $dat_materia['unidades_evaluadas'] = $unidades_evaluadas;
+            $dat_materia['suma_unidades'] = $suma_unidades;
+
+            //dd($dat_materia["calificaciones"]);
         }
-
-        $numero = 0;
-        $materias_calificaciones = [];
-        $estado_materias = 0;
-        $numero_alumno = 0;
-        $promedio_general = 0;
-        $numero_promedio_aprobado = 0;
-        $numero_promedio_reprobado = 0;
-        $porcentaje_final_aprobado = 0;
-        $porcentaje_final_reprobado = 0;
-
+        $numero=0;
+        $materias_calificaciones=array();
+        $estado_materias=0;
+        $numero_alumno=0;
+        $promedio_general=0;
+        $numero_promedio_aprobado=0;
+        $numero_promedio_reprobado=0;
+        $porcentaje_final_aprobado=0;
+        $porcentaje_final_reprobado=0;
         foreach ($alumnos as $alumno) {
             $numero++;
             $dat_l['numero'] = $numero;
@@ -107,240 +148,222 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
             $dat_l['cuenta'] = $alumno->cuenta;
             $dat_l['estado_validacion'] = $alumno->max_estado_validacion;
             $dat_l['nombre'] = mb_strtoupper($alumno->apaterno, 'utf-8') . " " . mb_strtoupper($alumno->amaterno, 'utf-8') . " " . mb_strtoupper($alumno->nombre, 'utf-8');
-            $cal_al = [];
-            $suma_promedio_final = 0;
-            $suma_materia = 0;
-            $estado_materia = 0;
-
-            array_push($array_mat, $dat_l);
-            //dd($dat_l);
-        }
-        foreach ($array_mat as $materiass) {
-            // Verifica si el índice 'id_materia' está definido en el array
-            if (isset($materiass['id_materia'])) {
-                $inscrito = DB::select('SELECT DISTINCT eva_carga_academica.id_materia,cal_duales_actuales.id_alumno
-                    FROM eva_carga_academica, cal_duales_actuales
-                    WHERE eva_carga_academica.id_materia = ' . $materiass['id_materia'] . ' AND eva_carga_academica.id_status_materia = 1
-                        AND cal_duales_actuales.id_alumno = ' . $alumno->id_alumno . '');
-                //dd($inscrito);
-                if ($inscrito && is_array($inscrito) && count($inscrito) > 0) {
-                    // Resto del código aquí
-                } else {
-                    // Si la consulta no devuelve resultados
+            $cal_al=array();
+            $suma_promedio_final=0;
+            $suma_materia=0;
+            $estado_materia=0;
+            foreach ($array_materias as $materiass) {
+//dd($materiass);
+                $inscrito = DB::selectOne('SELECT * FROM `eva_carga_academica` 
+                  WHERE `id_materia` = '.$materiass['id_materia'].' AND `id_status_materia` = 1 
+                  AND `id_periodo` = '.$id_periodo. ' and id_alumno='.$alumno->id_alumno.'');
+//dd($inscrito);
+                if ($inscrito == null) {
                     $datos_alumnos['id_carga_academica'] = 0;
                     $datos_alumnos['id_materia'] = $materiass['id_materia'];
-                    $datos_alumnos['nombre_materia'] = '';
+                    $datos_alumnos['materia'] = '';
                     $datos_alumnos['estado'] = 1;
-                }
-                $materia_promedio = 0; // Inicializamos la variable en caso de que no haya resultados
-
-                if ($inscrito && is_object($inscrito) && property_exists($inscrito, 'id_carga_academica')) {
-                    // Si $inscrito es un objeto y tiene la propiedad 'id_carga_academica', obtenemos la suma de las calificaciones
-                    $resultadoConsulta = DB::selectOne('SELECT SUM(calificacion) suma FROM `cal_evaluaciones` WHERE `id_carga_academica` =' . $inscrito->id_carga_academica . ' and calificacion >=70');
-
-                    if ($resultadoConsulta && is_object($resultadoConsulta) && property_exists($resultadoConsulta, 'suma')) {
-                        // Si la propiedad 'suma' existe en $resultadoConsulta, la asignamos a $materia_promedio
-                        $materia_promedio = $resultadoConsulta->suma;
-                    }
-                }
-
-
-                $contar_unidades_pasadas = 0;
-                $contar_unidades_sumativas = 0;
-
-                if ($inscrito && is_object($inscrito) && property_exists($inscrito, 'id_carga_academica')) {
-                    // Si $inscrito es un objeto y tiene la propiedad 'id_carga_academica', obtenemos el conteo de unidades pasadas
-                    $resultadoPasadas = DB::selectOne('SELECT COUNT(calificacion) as suma FROM `cal_evaluaciones` WHERE `id_carga_academica` =' . $inscrito->id_carga_academica . ' and calificacion >=70');
-
-                    if ($resultadoPasadas && is_object($resultadoPasadas) && property_exists($resultadoPasadas, 'suma')) {
-                        // Si la propiedad 'suma' existe en $resultadoPasadas, la asignamos a $contar_unidades_pasadas
-                        $contar_unidades_pasadas = $resultadoPasadas->suma;
-                    }
-
-                    // Obtenemos el conteo de unidades sumativas
-                    $resultadoSumativas = DB::selectOne('SELECT COUNT(calificacion) as num FROM `cal_evaluaciones` WHERE `id_carga_academica` =' . $inscrito->id_carga_academica . ' and esc=1');
-
-                    if ($resultadoSumativas && is_object($resultadoSumativas) && property_exists($resultadoSumativas, 'num')) {
-                        // Si la propiedad 'num' existe en $resultadoSumativas, la asignamos a $contar_unidades_sumativas
-                        $contar_unidades_sumativas = $resultadoSumativas->num;
-                    }
-                }
-                if ($contar_unidades_pasadas == $materiass['unidades']) {
-                    if ($materia_promedio == 0) {
-                        $promedio = 0;
-                    } else {
-                        $promedio = round($materia_promedio / $materiass['unidades']);
-                    }
-                    if ($inscrito->id_tipo_curso == 1 and $contar_unidades_sumativas == 0) {
-                        $te = 'O';
-                        $valor = 10;
-                        $estado_materia += $valor;
-                    } elseif ($inscrito->id_tipo_curso == 1 and $contar_unidades_sumativas > 0) {
-                        $te = 'ESC';
-                        $valor = 10;
-                        $estado_materia += $valor;
-                    } elseif ($inscrito->id_tipo_curso == 2 and $contar_unidades_sumativas == 0) {
-                        $te = 'O2';
-                        $valor = 100;
-                        $estado_materia += $valor;
-                    } elseif ($inscrito->id_tipo_curso == 2 and $contar_unidades_sumativas > 0) {
-                        $te = 'ESC2';
-                        $valor = 100;
-                        $estado_materia += $valor;
-                    }
-                    if ($inscrito->id_tipo_curso == 3 and $contar_unidades_sumativas == 0) {
-                        $te = 'CE';
-                        $valor = 1000;
-                        $estado_materia += $valor;
-                    }
-                    if ($inscrito->id_tipo_curso == 3 and $contar_unidades_sumativas > 0) {
-                        $te = 'EG';
-                        $valor = 1000;
-                        $estado_materia += $valor;
-                    }
-                    if ($inscrito->id_tipo_curso == 4) {
-                        $te = 'EG';
-                        $valor = 10000;
-                        $estado_materia += $valor;
-                    }
+                    $datos_alumnos['promedio'] = '';
+                    $datos_alumnos['te'] = '';
                 } else {
+                    $suma_materia++;
+                    $datos_alumnos['id_carga_academica'] = $inscrito->id_carga_academica;
+                    $datos_alumnos['id_materia'] = $inscrito->id_materia;
+                    $datos_alumnos['materia'] = $materiass['materia'];
+                    $datos_alumnos['estado'] = 2;
 
-                    if ($materia_promedio == 0) {
-                        $promedio = 0;
+
+                    $materia_promedio = DB::selectOne('SELECT SUM(calificacion) suma FROM `cal_evaluaciones` WHERE `id_carga_academica` =' . $inscrito->id_carga_academica . ' and calificacion >=70');
+                    $materia_promedio = $materia_promedio->suma;
+
+                    $contar_unidades_pasadas = DB::selectOne('SELECT count(calificacion) suma FROM `cal_evaluaciones` WHERE `id_carga_academica` = ' . $inscrito->id_carga_academica . ' and calificacion >=70');
+                    $contar_unidades_pasadas = $contar_unidades_pasadas->suma;
+
+                    $contar_unidades_sumativas = DB::selectOne('SELECT count(calificacion) num FROM `cal_evaluaciones` WHERE `id_carga_academica` = ' . $inscrito->id_carga_academica . ' and esc=1');
+                    $contar_unidades_sumativas = $contar_unidades_sumativas->num;
+                    if ($contar_unidades_pasadas == $materiass['unidades']) {
+                        if ($materia_promedio == 0) {
+                            $promedio = 0;
+                        } else {
+                            $promedio = round($materia_promedio / $materiass['unidades']);
+                        }
+                        if ($inscrito->id_tipo_curso == 1 and $contar_unidades_sumativas == 0) {
+                            $te = 'O';
+                            $valor=10;
+                            $estado_materia+=$valor;
+                        }
+                        elseif($inscrito->id_tipo_curso == 1 and $contar_unidades_sumativas > 0) {
+                            $te = 'ESC';
+                            $valor=10;
+                            $estado_materia+=$valor;
+                        }
+
+                        elseif ($inscrito->id_tipo_curso == 2 and $contar_unidades_sumativas == 0) {
+                            $te = 'O2';
+                            $valor=100;
+                            $estado_materia+=$valor;
+                        }
+                        elseif ($inscrito->id_tipo_curso == 2 and $contar_unidades_sumativas > 0) {
+                            $te = 'ESC2';
+                            $valor=100;
+                            $estado_materia+=$valor;
+                        }
+                        if ($inscrito->id_tipo_curso == 3 and $contar_unidades_sumativas == 0) {
+                            $te = 'CE';
+                            $valor=1000;
+                            $estado_materia+=$valor;
+                        }
+                        if ($inscrito->id_tipo_curso == 3 and $contar_unidades_sumativas > 0) {
+                            $te = 'EG';
+                            $valor=1000;
+                            $estado_materia+=$valor;
+                        }
+                        if ($inscrito->id_tipo_curso == 4) {
+                            $te = 'EG';
+                            $valor=10000;
+                            $estado_materia+=$valor;
+                        }
                     } else {
-                        $promedio = 0;
-                    }
-                    $te = ''; // Inicializa la variable $te con un valor predeterminado
-                    if ($inscrito && is_object($inscrito) && property_exists($inscrito, 'id_tipo_curso')) {
-                        // Verificar si $inscrito es un objeto y tiene la propiedad 'id_tipo_curso'
 
+                        if ($materia_promedio == 0) {
+                            $promedio = 0;
+                        } else {
+                            $promedio = 0;
+                        }
                         if ($inscrito->id_tipo_curso == 1) {
                             $te = 'ESC';
-                            $valor = 10;
-                            $estado_materia += $valor;
+                            $valor=10;
+                            $estado_materia+=$valor;
                         }
                         if ($inscrito->id_tipo_curso == 2) {
                             $te = 'ESC2';
-                            $valor = 100;
-                            $estado_materia += $valor;
+                            $valor=100;
+                            $estado_materia+=$valor;
                         }
                         if ($inscrito->id_tipo_curso == 3) {
-                            $valor = 1000;
-                            $estado_materia += $valor;
+                            $valor=1000;
+                            $estado_materia+=$valor;
                             $te = 'EG';
                         }
                         if ($inscrito->id_tipo_curso == 4) {
-                            $valor = 10000;
-                            $estado_materia += $valor;
+                            $valor=10000;
+                            $estado_materia+=$valor;
                             $te = 'EG';
                         }
+
+
                     }
 
+                    $datos_alumnos['promedio'] = $promedio;
+                    $datos_alumnos['te'] = $te;
+                    $suma_promedio_final += $promedio;
+
                 }
-                $datos_alumnos['promedio'] = $promedio;
-                $datos_alumnos['te'] = $te;
-                $suma_promedio_final += $promedio;
+
+                array_push($cal_al, $datos_alumnos);
+            }
+            $estado_materias=$estado_materia;
+            if($estado_materias <100){
+                $estado_al=1;
 
             }
-
-            array_push($cal_al, $datos_alumnos);
-        }
-        $estado_materias = $estado_materia;
-        if ($estado_materias < 100) {
-            $estado_al = 1;
-
-        } elseif ($estado_materias < 1000) {
-            $estado_al = 2;
-        } elseif ($estado_materias < 10000) {
-            $estado_al = 3;
-        } elseif ($estado_materias < 100000) {
-            $estado_al = 4;
-        }
-        if ($suma_promedio_final == 0) {
-            $promedio_f = 0;
-        } else {
-            $promedio_f = $suma_promedio_final / $suma_materia;
-        }
-        if ($alumno->max_estado_validacion != 10) {
-            $numero_alumno++;
-            $promedio_general += number_format($promedio_f, 2, '.', ' ');
-            $pro_al = number_format($promedio_f, 2, '.', ' ');
-            if ($pro_al >= 70) {
-                $numero_promedio_aprobado++;
-            } else {
-                $numero_promedio_reprobado++;
+            elseif ($estado_materias <1000)
+            {
+                $estado_al=2;
             }
+            elseif ($estado_materias <10000)
+            {
+                $estado_al=3;
+            }
+            elseif ($estado_materias <100000)
+            {
+                $estado_al=4;
+            }
+            if($suma_promedio_final ==0 )
+            {
+                $promedio_f=0;
+            }
+            else{
+                $promedio_f=$suma_promedio_final/$suma_materia;
+            }
+            if($alumno->max_estado_validacion != 10)
+            {
+                $numero_alumno++;
+                $promedio_general+=number_format($promedio_f, 2, '.', ' ');
+                $pro_al=number_format($promedio_f, 2, '.', ' ');
+                if($pro_al >= 70){
+                    $numero_promedio_aprobado++;
+                }
+                else{
+                    $numero_promedio_reprobado++;
+                }
+
+            }
+            $dat_l['promedio_f']=number_format($promedio_f, 2, '.', ' ');
+            $dat_l['l']=$cal_al;
+            $dat_l['estado_alumno']=$estado_al;
+            array_push($materias_calificaciones, $dat_l);
+        }
+        if($promedio_general == 0 || $numero_alumno == 0)
+        {
+            $promedio_general=0;
 
         }
-        $dat_l['promedio_f'] = number_format($promedio_f, 2, '.', ' ');
-        $dat_l['l'] = $cal_al;
-        $dat_l['estado_alumno'] = $estado_al;
-        array_push($materias_calificaciones, $dat_l);
-
-        if ($promedio_general == 0 || $numero_alumno == 0) {
-            $promedio_general = 0;
-
-        } else {
-            $promedio_general = $promedio_general / $numero_alumno;
+        else{
+            $promedio_general=$promedio_general/$numero_alumno;
 
         }
 
 //dd($materias_calificaciones);
-        $com = array();
-        foreach ($array_mat as $mater) {
-            $esta = false;
+        $com=array();
+        foreach ($array_materias as $mater) {
+            $esta=false;
 
-            $contar_alumnos = 0;
-            $contar_reprobados = 0;
-            $contar_aprobados = 0;
-            $suma_promedioss = 0;
-            $bajas = 0;
+            $contar_alumnos=0;
+            $contar_reprobados=0;
+            $contar_aprobados=0;
+            $suma_promedioss=0;
+            $bajas=0;
 
             foreach ($materias_calificaciones as $cal) {
 
-                foreach ($cal['l'] as $mater) {
-                    // Asegúrate de que la clave 'id_materia' esté definida en $mater
-                    if (isset($mater['id_materia'])) {
-                        // Verifica si hay una coincidencia con la condición deseada
-                        if ($mater['id_materia'] == $mater['id_materia']) {
-                            if ($mater['estado'] == 2 and $cal['estado_validacion'] != 10) {
-                                $contar_alumnos++;
-                                if ($mater['promedio'] < 70) {
-                                    $contar_reprobados++;
-                                } else {
-                                    $contar_aprobados++;
-                                }
-                                $suma_promedioss += $mater['promedio'];
-                                if ($mater['te'] == 'EG') {
-                                    $bajas++;
-                                }
-                            } elseif ($mater['estado'] == 2 and $cal['estado_validacion'] == 10) {
+                foreach ($cal['l'] as $mate) {
+                    if ($mater['id_materia'] == $mate['id_materia']) {
+                        if ($mate['estado'] == 2 and $cal['estado_validacion'] != 10) {
+                            $contar_alumnos++;
+                            if ($mate['promedio'] < 70) {
+                                $contar_reprobados++;
+                            } else {
+                                $contar_aprobados++;
+                            }
+                            $suma_promedioss += $mate['promedio'];
+                            if ($mate['te'] == 'EG') {
                                 $bajas++;
                             }
-                            $esta = true;
-                            break;
                         }
-                    }
+                        elseif($mate['estado'] == 2 and $cal['estado_validacion'] == 10){
+                            $bajas++;
+                        }
+                        $esta = true;
+                        break;
+                    } // esta es la que se me olvidaba
                 }
-                foreach ($cal['l'] as $mater) {
-                    // Asegúrate de que 'id_materia' esté definida en $mater
-                    if (isset($mater['id_materia'])) {
-                        $compra['id_materia'] = $mater['id_materia'];
-                        $compra['nombre_materia'] = $mater['nombre_materia'];
-                        $compra['creditos'] = $mater['creditos'];
-                        $compra['aprobados'] = $contar_aprobados;
-                        $compra['reprobados'] = $contar_reprobados;
-                        $compra['suma_promedios'] = $suma_promedioss;
-                        $compra['bajas'] = $bajas;
-                        $compra['total'] = $contar_alumnos;
-                        array_push($com, $compra);
-                    }
-                }
+
+
             }
+            $compra['id_materia']=$mater['id_materia'];
+            $compra['materia'] = $mater['materia'];
+            $compra['creditos'] = $mater['creditos'];
+            $compra['aprobados']=$contar_aprobados;
+            $compra['reprobados']=$contar_reprobados;
+            $compra['suma_promedios']=$suma_promedioss;
+            $compra['bajas']=$bajas;
+            $compra['total']=$contar_alumnos;
+            array_push($com, $compra);
         }
         return view('duales.concentrado_calificaciones_duales.concentrado_alumnos_materias',
-            compact('numero_promedio_reprobado', 'numero_promedio_aprobado', 'numero_alumno', 'promedio_general',
-                'com', 'array_mat','materias_calificaciones', 'bajas', 'alumnos', 'materia_seleccionada', 'datos'));
+            compact('alumnos', 'materia_seleccionada', 'datos','array_materias','array_calificaciones',
+                'com','numero_promedio_aprobado','numero_alumno','numero_promedio_reprobado'));
 
     }
 }

@@ -168,8 +168,10 @@
                                 </td>
                                 @foreach($com as $califi)
                                     <td class="text-right" >
-                                        <?php  $numero_materia++;
-                                        $creditos_finales+=$califi['creditos'];?>
+                                        <?php
+                                        $numero_materia++;
+                                        $creditos_finales+=$califi['creditos'];
+                                        ?>
 
                                         @if($califi['aprobados']==0)
                                             0%

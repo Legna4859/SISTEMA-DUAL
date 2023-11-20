@@ -25,7 +25,7 @@
 
 <div class="row">
                 <div class="col-md-8 col-xs-10 col-md-offset-2">
-                     <table class="table table-bordered col-md-12">
+                     <table class="table table-bordered col-md-12" >
                         <thead>
                         <tr class="info">
                             <th class="text-center">CLAVE</th>
