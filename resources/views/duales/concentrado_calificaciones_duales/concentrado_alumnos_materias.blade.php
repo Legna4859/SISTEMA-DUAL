@@ -314,12 +314,11 @@
     <div class="row" style="padding: 1.0em">
         <div class="col-md-10 col-xs-10 col-md-offset-5">
             @foreach($array_materias as $materia)
-                <a href="{{ url('/duales/exportar_concentrado/'. $materia['id_materia']) }}" class="btn btn-warning" style="color:black">
+                <a href="{{ url('/duales/concentrado_calificaciones_duales/concentrado_excel/'. $materia['id_materia']) }}" class="btn btn-warning" style="color:black">
                     Exportar Concentrado <span class="oi oi-document p-1"></span>
                 </a>
             @endforeach
         </div>
-</div>
-
+    </div>
 
 @endsection
