@@ -366,4 +366,5 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
                 'com','numero_promedio_aprobado','numero_alumno','numero_promedio_reprobado'));
 
     }
+    
 }

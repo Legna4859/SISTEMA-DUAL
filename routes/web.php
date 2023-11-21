@@ -2066,7 +2066,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/duales/concentrado_calificaciones_duales/semestres/{id_semestre}', 'Dual_Concentrado_Calificaciones@concentrado_calificaciones');
     Route::get('/duales/concentrado_calificaciones_duales/materias/{id_carrera}/{id_semestre}/{id_grupo}', 'Dual_Concentrado_Calificaciones@concentrado_materias');
     Route::get('/duales/concentrado_calificaciones_duales/concentrado_alumnos_materias/{id_materia}', 'Dual_Concentrado_Alumnos_Materias@index');
-    
+
 
 });
 

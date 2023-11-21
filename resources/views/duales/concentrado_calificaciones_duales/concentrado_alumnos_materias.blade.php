@@ -45,6 +45,7 @@
             </table>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-10 col-xs-10 col-md-offset-1">
             <div class="panel">
@@ -207,10 +208,10 @@
 
                             @endforeach
                             <td style="text-align: center">
-                                @if($promedio_general ==0)
+                                @if($promedio==0)
                                     0.00
                                 @else
-                                        <?php  $pro_f=$promedio_general;
+                                        <?php  $pro_f=$promedio;
                                         $pro_f=number_format($pro_f, 2, '.', ' ');?>
                                     {{$pro_f}}
                                 @endif
@@ -310,5 +311,15 @@
             </div>
         </div>
     </div>
+    <div class="row" style="padding: 1.0em">
+        <div class="col-md-10 col-xs-10 col-md-offset-5">
+            @foreach($array_materias as $materia)
+                <a href="{{ url('/duales/exportar_concentrado/'. $materia['id_materia']) }}" class="btn btn-warning" style="color:black">
+                    Exportar Concentrado <span class="oi oi-document p-1"></span>
+                </a>
+            @endforeach
+        </div>
+</div>
+
 
 @endsection

@@ -16,7 +16,13 @@
         @foreach($grupos as $grupo)
         <div class="col-md-4 col-md-offset-1">
             <div class="panel panel-success">
-                <div class="panel-heading" style="text-align: center"><h3>{{$grupo->id_semestre}}0{{$grupo->grupo}}</h3><br><button type="button" class="btn btn-info" onclick="window.open('{{ url('/servicios_escolares/concentrado_calificaciones/materias/'.$grupo->id_carrera."/".$grupo->id_semestre."/".$grupo->grupo ) }}')">Mostrar materias</button></div>
+                <div class="panel-heading" style="text-align: center">
+                    <h3>{{$grupo->id_semestre}}0{{$grupo->grupo}}</h3><br>
+                    <button type="button" class="btn btn-primary"
+                    onclick="window.open('{{ url('/servicios_escolares/concentrado_calificaciones/materias/'.$grupo->id_carrera."/".$grupo->id_semestre."/".$grupo->grupo ) }}')">
+                        Mostrar Materias <span class="glyphicon glyphicon-level-up"></span
+                    </button>
+                </div>
             </div>
         </div>
         @endforeach

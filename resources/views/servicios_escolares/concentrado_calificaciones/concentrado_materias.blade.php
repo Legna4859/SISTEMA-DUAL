@@ -16,7 +16,13 @@
     <div class="row">
         <div class="col-md-8 col-xs-10 col-md-offset-2">
             <div class="panel panel-danger">
-                    <h3 class="panel-title text-center">No han registrado calificaciones de sumativas en este semestre</h3>
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        No han registrado calificaciones de sumativas en este semestre
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                    </h3>
+                </div>
             </div>
 
         </div>
@@ -26,8 +32,10 @@
         @if($mat_sin_cal ==0)
             <div class="row">
                 <div class="col-md-8 col-xs-10 col-md-offset-2">
-                    <div class="panel panel-primary">
-                        <h3 class="panel-title text-center">Concentrado de calificaciones completo</h3>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title text-center">Concentrado de calificaciones completo</h3>
+                        </div>
                     </div>
 
                 </div>
@@ -36,8 +44,6 @@
             <div class="row">
                 <div class="col-md-2 col-md-offset-6">
                     <a href="/servicios_escolares/concentrado_calificaciones_excel/{{$id_carrera}}/{{$id_semestre}}/{{$grupo}}" class="btn btn-success">Exportar concentrado <span class="oi oi-document p-1"></span></a>
-
-
                 </div>
             </div>
 
