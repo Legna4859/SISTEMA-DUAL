@@ -100,7 +100,7 @@
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar <span class="glyphicon glyphicon-remove-sign"></span></button>
+                                <button type="button" class="btn" data-dismiss="modal" style="background:crimson;color:whitesmoke">Cancelar <span class="glyphicon glyphicon-remove-sign"></span></button>
                                 <button  id="calificacion_duales_actuales" type="button"   class="btn btn-primary " >Guardar <span class="glyphicon glyphicon-saved"></span></button>
                             </div>
                         </div>

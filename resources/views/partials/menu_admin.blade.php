@@ -191,7 +191,7 @@
                                 <li class="dropdown">
                                     <a class="dropdown-toogle" href="" data-toggle="dropdown" role="button"
                                        aria-haspopup="true" aria-expanded="false">Duales
-                                        <span class="caret"></span></a>
+                                        <span class="caret"></span>
                                         <ul class="dropdown-menu">
                                             <li><a href="{{url('/duales/mentor_calificar')}}">Calificar Alumnos Duales</a></li>
                                         </ul>
@@ -631,8 +631,13 @@
                                                 en evaluaciones ordinarias</a></li>
                                         <li><a href="/servicios_escolares/bitacora_evaluaciones_sumativas" class="">Modificaciones
                                                 en evaluaciones sumativas</a></li>
-                                        <li><a href="/servicios_escolares/alumnos/carrera" class="">Datos de los alumnos
-                                                por carrera</a></li>
+                                        <li>
+                                            <a href="/servicios_escolares/alumnos/carrera" class="">Datos de los alumnos
+                                                por carrera</a>
+                                            </li>
+                                            <li>
+                                            <a href="/duales/gestion_academica" class="">Getión de Académica de Alumnos Duales</a>
+                                            </li>
                                         @if($escolar==true)
                                         <li>
                                             <a href="{{url('/cct/registros/')}}">Instituciones educativas</a>

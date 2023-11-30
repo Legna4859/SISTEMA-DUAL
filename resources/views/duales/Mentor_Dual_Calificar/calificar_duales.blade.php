@@ -10,9 +10,7 @@
                             onclick="window.open('{{url('/duales/generar_listas_duales/')}}')">
                         Generar Lista de Asistencia <span class="glyphicon glyphicon-list"></span>
                     </button>
-
                 </div>
-
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
@@ -26,7 +24,6 @@
                                 <table id="paginar_table" class="table table-bordered " style="text-align: center">
                                     <thead>
                                     <tr class="info">
-                                        <th style="text-align: center"><strong>Nombre del Docente</strong></th>
                                         <th style="text-align: center"><strong>No. Cuenta</strong></th>
                                         <th style="text-align: center"><strong>Nombre del Alumno Dual</strong></th>
                                         <th style="text-align: center">Calificar Alumno</th>
@@ -35,8 +32,6 @@
                                     <tbody>
                                     @foreach($datos_registros as $dato_registro)
                                         <tr>
-                                            <td>{{$dato_registro->titulo}} {{$dato_registro->profesor}}</td>
-
                                             <td>{{$dato_registro->cuenta}}</td>
                                             <td>{{$dato_registro->nombre." ".$dato_registro->apaterno." ".$dato_registro->amaterno}}</td>
                                             <td>

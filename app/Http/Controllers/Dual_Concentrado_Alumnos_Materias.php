@@ -36,9 +36,7 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
         LEFT JOIN eva_validacion_de_cargas ON eva_carga_academica.id_alumno = eva_validacion_de_cargas.id_alumno
         AND eva_validacion_de_cargas.id_periodo = eva_carga_academica.id_periodo 
         WHERE cal_duales_actuales.id_periodo = ' . $id_periodo . '  
-        AND gnral_alumnos.id_carrera IN (' . $carreras->pluck('id_carrera')->implode(',') . ')
         AND gnral_materias.id_semestre > 5  
-        AND gnral_reticulas.id_carrera IN (' . $carreras->pluck('id_carrera')->implode(',') . ')
         AND eva_carga_academica.id_status_materia = 1 
         AND eva_carga_academica.id_periodo = ' . $id_periodo . '
         AND eva_validacion_de_cargas.estado_validacion= 8
@@ -55,7 +53,6 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
             ->select('gnral_personales.nombre as profesor', 'abreviaciones.titulo')
             ->distinct()
             ->where('cal_duales_actuales.id_periodo', $id_periodo)
-            ->whereIn('gnral_alumnos.id_carrera', $carreras->pluck('id_carrera')->toArray())
             ->get();
         //dd($datos);
 
@@ -70,11 +67,11 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
         JOIN eva_validacion_de_cargas ON gnral_alumnos.id_alumno = eva_validacion_de_cargas.id_alumno
         WHERE gnral_periodos.id_periodo = ' . $id_periodo . '
         AND eva_carga_academica.id_materia = ' . $id_materia . '
-        AND eva_carga_academica.id_materia NOT IN (773,845,853,1160,1263,1264,1265,1443,1496,1502,1565,1566,1567,1568,1569,1571)
         AND gnral_periodos.id_periodo = eva_validacion_de_cargas.id_periodo
-        AND eva_validacion_de_cargas.id_alumno IN (SELECT cal_duales_actuales.id_alumno FROM cal_duales_actuales WHERE cal_duales_actuales.id_periodo = ' . $id_periodo . ')
+        AND eva_validacion_de_cargas.estado_validacion = 8
         AND eva_status_materia.id_status_materia = 1
         GROUP BY gnral_materias.id_materia');
+        //dd($materia_seleccionada);
 
         $array_materias=array();
         $mayor_unidades=0;
@@ -153,7 +150,7 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
             $suma_materia=0;
             $estado_materia=0;
             foreach ($array_materias as $materiass) {
-//dd($materiass);
+//dd($array_materias);
                 $inscrito = DB::selectOne('SELECT * FROM `eva_carga_academica` 
                   WHERE `id_materia` = '.$materiass['id_materia'].' AND `id_status_materia` = 1 
                   AND `id_periodo` = '.$id_periodo. ' and id_alumno='.$alumno->id_alumno.'');
@@ -250,10 +247,7 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
                             $estado_materia+=$valor;
                             $te = 'EG';
                         }
-
-
                     }
-
                     $datos_alumnos['promedio'] = $promedio;
                     $datos_alumnos['te'] = $te;
                     $suma_promedio_final += $promedio;
@@ -303,6 +297,7 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
             $dat_l['l']=$cal_al;
             $dat_l['estado_alumno']=$estado_al;
             array_push($materias_calificaciones, $dat_l);
+
         }
         if($promedio_general == 0 || $numero_alumno == 0)
         {
@@ -348,8 +343,6 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
                         break;
                     } // esta es la que se me olvidaba
                 }
-
-
             }
             $compra['id_materia']=$mater['id_materia'];
             $compra['materia'] = $mater['materia'];
@@ -363,7 +356,7 @@ class Dual_Concentrado_Alumnos_Materias extends Controller
         }
         return view('duales.concentrado_calificaciones_duales.concentrado_alumnos_materias',
             compact('alumnos', 'materia_seleccionada', 'datos','array_materias','array_calificaciones',
-                'com','numero_promedio_aprobado','numero_alumno','numero_promedio_reprobado'));
+                'com','numero_promedio_aprobado','numero_alumno','numero_promedio_reprobado','materias_calificaciones'));
 
     }
     

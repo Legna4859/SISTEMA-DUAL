@@ -30,9 +30,6 @@
                     <li role="presentation">
                         <a href="#tres" aria-controls="dos" role="tab" data-toggle="tab">Aceptados (Duales nueva versión)</a>
                     </li>
-                    <li role="presentation">
-                        <a href="#cuatro" aria-controls="dos" role="tab" data-toggle="tab">Aceptados (Duales versión antigua)</a>
-                    </li>
                 </ul>
         </div>
     </div>
@@ -192,59 +189,6 @@
                 </table>
             </div>
         </div>
-        <div role="tabpanel" class="tab-pane" id="cuatro">
-            <div class=" col-md-10 col-md-offset-1">
-
-                </br></br></br>
-
-                <table class="table table-bordered " Style="background: white;" id="version_antigua">
-                    <thead>
-                    <tr class="info">
-                        <th style="text-align: center">No. CUENTA</th>
-                        <th style="text-align: center">NOMBRE DE ALUMNO(A)</th>
-                        <th style="text-align: center">SEMESTRE</th>
-                        <th style="text-align: center">CARRERA</th>
-                        <th style="text-align: center">CARGA ACADEMICA</th>
-                        @if($periodo_activo == 1)
-                        <th style="text-align: center">MODIFICACIÓN DE ESTADO DEL ALUMNO</th>
-                        <th style="text-align: center">DAR DE BAJA ALUMNO</th>
-                        @endif
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    @foreach($consulta4 as$consulta4)
-                        <tr>
-                            <th style="text-align: center">{{$consulta4->cuenta}}</th>
-                            <td style="text-align: center">{{$consulta4->nombre}} {{$consulta4->apaterno}} {{$consulta4->amaterno}}</td>
-                            <td style="text-align: center">{{$consulta4->semestre}}</td>
-                            <td style="text-align: center">{{$consulta4->carreras}}</td>
-                            <td style="text-align: center">
-                                <a onclick="window.open('{{ url('/revicion_control_escolar/'.$consulta4->id ) }}')"><span class="glyphicon glyphicon-list-alt em5" aria-hidden="true"></span></a>
-                            </td>
-                            @if($periodo_activo == 1)
-                            <td style="text-align: center">
-                                @if($escolar  == true)
-                                <a class=" btn btn-success activar_periodo_carga" id="{{$consulta4->id}}" type="button" >Modificar estado del alumno<span class="glyphicon glyphicon-ok " aria-hidden="true"/></a>
-                                @endif
-                            </td>
-                            <td style="text-align: center">
-                                @if($escolar  == true)
-                                <a class=" btn btn-danger baja" id="{{$consulta4->id}}" type="button" >Dar de baja<span class="glyphicon glyphicon-edit " aria-hidden="true"/></a>
-                                @endif
-                            </td>
-                            @endif
-
-                        </tr>
-                    @endforeach
-
-
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
 </div>
 </div>

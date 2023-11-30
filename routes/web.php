@@ -88,7 +88,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/calificar_estudiante_duales_actuales/{id_carga}', 'validacion_de_cargaController@calificar_estudiante_duales_actuales');
     Route::post('/terminar_calificar/duales_actuales/{id_alumno}/{id_periodo}', 'validacion_de_cargaController@terminar_calificar_duales_actuales');
     Route::post('/modificar_mentor/{id_alumno}/{id_periodo}', 'validacion_de_cargaController@modificar_mentor');
-    Route::get('/acta_dual_actual/{id_alumno}/{id_periodo}', 'Cal_pdf_acta_dualController@acta_dual_actual');
     Route::get('/acta_materias/{id_alumno}/{turno}/{semestre}/{grupo}', 'Cal_pdf_acta_alumnoController@acta_materias');
 
     Route::resource('/desactivar', 'validacion_de_cargaController@desactivar');
@@ -2015,20 +2014,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('/centro_computo/registro_estudiantes_correo/','Compu_reg_usuarioController');
     Route::post('/centro_computo/registro_datos_estudiante_excel/','Compu_reg_usuarioController@registro_datos_estudiante_excel');
 
-
-    //********************************************************************************************************
-    //********************************************************************************************************
-    //******************************ASIGNAR MENTORES DUALES**************************************************//
-    Route::resource('/duales/Agregar_docentes_duales','Dual_Mentor');
-    Route::post('/duales/guardar_mentor_dual','Dual_Mentor@guardar_mentor_dual');
-
     //********************************************************************************************************
     //********************************************************************************************************
     //******************************ASIGNAR ALUMNOS DUALES**************************************************//
     Route::resource('/duales/agregar_alumnos_dual','Dual_AlumnoController');
     Route::post('/duales/guardar_alumno_dual','Dual_AlumnoController@guardar_alumno_dual');
     Route::delete('/duales/Eliminar_dual/{id_duales_actuales}','Dual_AlumnoController@eliminar_alumno_dual');
-
 
     //********************************************************************************************************
     //****************************** **************************************************************************
@@ -2049,10 +2040,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/duales/imprime_control/{id_alumno}', 'Dual_PDF_Carga_Academica_Control@index');
 
     //********************************************************************************************************
+    //********************************************************************************************************
+    //******************************ASIGNAR MENTORES DUALES**************************************************//
+    Route::resource('/duales/Agregar_docentes_duales','Dual_Mentor');
+    Route::post('/duales/guardar_mentor_dual','Dual_Mentor@guardar_mentor_dual');
+
+    //********************************************************************************************************
     //****************************** **************************************************************************
     //********************CALIFICACIONES DE LOS ALUMNOS DUALES********************//
     Route::resource('/duales/mentor_calificar', 'Dual_Mentor_Calificaciones');
     Route::get('/duales/calificar_estudiante/{id_carga}', 'Dual_Validar_Carga_Academica_Alumno@calificar_estudiante');
+    Route::get('/acta_dual_actual/{id_alumno}/{id_periodo}', 'Cal_pdf_acta_dualController@acta_dual_actual');
 
     //********************************************************************************************************
     //****************************** **************************************************************************
@@ -2063,11 +2061,16 @@ Route::middleware('auth')->group(function () {
     //****************************** **************************************************************************
     //********************CONCENTRADO DE CALIFICACIONES DE LOS ALUMNOS DUALES********************//
     Route::get('/duales/concentrado_calificaciones_duales', 'Dual_Concentrado_Calificaciones@index');
-    Route::get('/duales/concentrado_calificaciones_duales/semestres/{id_semestre}', 'Dual_Concentrado_Calificaciones@concentrado_calificaciones');
+    Route::get('/duales/concentrado_calificaciones_duales/semestres/{id_carrera}', 'Dual_Concentrado_Calificaciones@concentrado_calificaciones');
     Route::get('/duales/concentrado_calificaciones_duales/materias/{id_carrera}/{id_semestre}/{id_grupo}', 'Dual_Concentrado_Calificaciones@concentrado_materias');
     Route::get('/duales/concentrado_calificaciones_duales/concentrado_alumnos_materias/{id_materia}', 'Dual_Concentrado_Alumnos_Materias@index');
     Route::get('/duales/concentrado_calificaciones_duales/concentrado_excel/{id_materia}', 'Dual_Excel@concentrado_calificaciones_materias');
-
-
+  
+    //********************************************************************************************************
+    //****************************** **************************************************************************
+    //********************GESTIÓN ACADÉMICA DUALES********************//
+Route::get('/duales/gestion_academica', 'Dual_Gestion_Direccion_Academica@index');
+Route::get('/duales/gestion_academica/docentes', 'Dual_Gestion_Direccion_Academica@ver_docentes_duales');
+    Route::get('/duales/gestion_academica/alumnos', 'Dual_Gestion_Direccion_Academica@ver_alumnos_duales');
 });
 

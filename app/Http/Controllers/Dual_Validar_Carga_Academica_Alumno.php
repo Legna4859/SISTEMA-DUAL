@@ -29,16 +29,12 @@ class Dual_Validar_Carga_Academica_Alumno extends Controller
         }else{
             $periodo_activo=0;
         }
-
-
         $consulta=DB::select('SELECT eva_validacion_de_cargas.id, eva_validacion_de_cargas.id_alumno,gnral_alumnos.cuenta, gnral_alumnos.nombre, gnral_alumnos.apaterno, gnral_alumnos.amaterno, gnral_carreras.nombre carreras 
                                 FROM eva_validacion_de_cargas, gnral_alumnos, gnral_carreras 
                                 WHERE eva_validacion_de_cargas.id_periodo='.$periodo.' 
                                 AND eva_validacion_de_cargas.estado_validacion= 1
                                 AND eva_validacion_de_cargas.id_alumno=gnral_alumnos.id_alumno 
                                 AND gnral_alumnos.id_carrera=gnral_carreras.id_carrera');
-
-
         $consulta2=DB::select('SELECT eva_validacion_de_cargas.id, eva_validacion_de_cargas.id_alumno,
           gnral_alumnos.cuenta, gnral_alumnos.nombre,gnral_alumnos.apaterno, gnral_alumnos.amaterno, 
           gnral_carreras.nombre carreras, gnral_semestres.descripcion semestre 

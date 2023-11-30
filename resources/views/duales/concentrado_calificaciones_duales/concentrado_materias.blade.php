@@ -11,7 +11,6 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-8 col-xs-10 col-md-offset-2">
         <div class="panel panel-success">
@@ -21,8 +20,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="row">
                 <div class="col-md-8 col-xs-10 col-md-offset-2">
                      <table class="table table-bordered col-md-12" >
@@ -35,20 +32,17 @@
                         </tr>
                         </thead>
                         <tbody>
-
                       @foreach($array_materias as $materia)
-    <tr class="text-center">
-        <td>{{ $materia['clave'] }}</td>
-        <td>{{ $materia['nombre'] }}</td>
-        <td colspan="3">
-            <a href="{{ url('/duales/concentrado_calificaciones_duales/concentrado_alumnos_materias/' . $materia['id_materia']) }}" class="btn btn-success">
-                Concentrado de Calificaciones <span class="oi oi-book p-1"></span>
-            </a>
-        </td>
-    </tr>
-@endforeach
-
-
+                        <tr class="text-center">
+                            <td>{{ $materia['clave'] }}</td>
+                            <td>{{ $materia['nombre'] }}</td>
+                            <td colspan="3">
+                                <a href="{{ url('/duales/concentrado_calificaciones_duales/concentrado_alumnos_materias/' . $materia['id_materia']) }}" class="btn btn-success">
+                                    Concentrado de Calificaciones <span class="oi oi-book p-1"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Codedge\Fpdf\Fpdf\Fpdf as FPDF;
 use Illuminate\Support\Facades\DB;
 use Session;
-
-
 class PDF extends FPDF
 {
 

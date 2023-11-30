@@ -9,51 +9,12 @@ use Session;
 
 class PDF extends FPDF
 {
-
     //CABECERA DE LA PAGINA
     function Header()
     {
         $this->Image('img/tes.PNG', 80 , 15, 50);
         //$this->Image('img/gem.png',25,10,32);
         $this->Ln(10);
-    }
-    //PIE DE PAGINA
-    function Footer()
-    {
-/*
-        $this->SetY(-25);
-        $this->SetFont('Arial','',8);
-        $this->Image('img/sgc.PNG',40,183,20);
-
-        $this->Image('img/sga.PNG',65,183,20);
-        $this->Cell(100);
-        $this->Cell(167,-2,utf8_decode('FO-TESVB-39  V.1  14-08-2019'),0,0,'R');
-        $this->Ln(3);
-        $this->Cell(100);
-        $this->Cell(167,-2,utf8_decode('SECRETARÍA DE EDUCACIÓN'),0,0,'R');
-        $this->Ln(3);
-        $this->Cell(100);
-        $this->Cell(167,-2,utf8_decode('SUBSECRETARÍA DE EDUCACIÓN SUPERIOR Y NORMAL'),0,0,'R');
-        $this->Ln(3);
-        $this->Cell(100);
-        $this->Cell(167,-2,utf8_decode('TECNOLÓGICO DE ESTUDIOS SUPERIORES DE VALLE DE BRAVO'),0,0,'R');
-        $this->Ln(3);
-        $this->Cell(100);
-        $this->Cell(167,-2,utf8_decode('SUBDIRECCIÓN DE SERVICIOS ESCOLARES'),0,0,'R');
-        $this->Cell(280);
-        $this->SetMargins(0,0,0);
-        $this->Ln(0);
-        $this->SetXY(30,204);
-        $this->SetFillColor(120,120,120);
-        $this->Cell(20,10,'',0,0,'',TRUE);
-        $this->SetTextColor(255,255,255);
-        $this->Cell(297,10,utf8_decode('Km. 30 de la Carretera Federal Monumento - Valle de Bravo, Ejido de San Antonio de la Laguna,'),0,0,'L',TRUE);
-        $this->Ln(3);
-        $this->Cell(50);
-        $this->Cell(160,10,utf8_decode(' Valle de Bravo, Estado de México, C.P. 51200.    Tels.: (726)26 6 52 00, 26 6 50 77,26 6 51 87 Ext 115                             sub.escolares@tesvb.edu.mx'),0,0,'L');
-
-        $this->Image('img/logos/Mesquina.jpg',0,190,30);
-*/
     }
 
 }
@@ -96,12 +57,12 @@ class Cal_pdf_acta_dualController extends Controller
         $pdf->SetMargins(20, 25 , 20);
         $pdf->SetAutoPageBreak(true,25);
         $pdf->AddPage();
-        $pdf->SetFont('Arial','B','8');
+        $pdf->SetFont('Times','B','8');
         $pdf->Cell(80);
         $pdf->Cell(15,10,utf8_decode('TECNOLÓGICO DE ESTUDIOS SUPERIORES DE VALLE DE BRAVO'),0,1,'C');
         $pdf->Ln(1);
-        $pdf->SetFillColor(166,166,166);
-        $pdf->SetFont('Arial','B','9');
+        $pdf->SetFillColor(220, 220, 220); // Gris claro
+        $pdf->SetFont('Times','B','9');
         $pdf->Ln(3);
         $pdf->Cell(180,5,utf8_decode('ACTA DE CALIFICACIONES DE ESTUDIANTE DUAL'),0,1,'C',true);
         $pdf->Ln(5);
@@ -118,21 +79,19 @@ class Cal_pdf_acta_dualController extends Controller
         $pdf->Cell(130,5,utf8_decode(''),0,0,'L');
         $pdf->Cell(50,5,utf8_decode($fech),0,1,'C');
         $pdf->Ln(3);
-        $pdf->SetFont('Arial','B','7');
+        $pdf->SetFont('Times','B','6');
         $pdf->Cell(10,3,utf8_decode(''),'LTR',0,'C',true);
         $pdf->Cell(30,3,utf8_decode('SEMESTRE DE LA'),'LTR',0,'C',true);
         $pdf->Cell(30,3,utf8_decode('CLAVE DE LA'),'LTR',0,'C',true);
         $pdf->Cell(70,3,utf8_decode(''),'LTR',0,'C',true);
         $pdf->Cell(20,3,utf8_decode(''),'LTR',0,'C',true);
         $pdf->Cell(20,3,utf8_decode(''),'LTR',1,'C',true);
-
         $pdf->Cell(10,3,utf8_decode('NP'),'LBR',0,'C',true);
         $pdf->Cell(30,3,utf8_decode('MATERIA'),'LBR',0,'C',true);
         $pdf->Cell(30,3,utf8_decode('MATERIA'),'LBR',0,'C',true);
         $pdf->Cell(70,3,utf8_decode('MATERIA'),'LBR',0,'C',true);
         $pdf->Cell(20,3,utf8_decode('PROMEDIO'),'LBR',0,'C',true);
-        $pdf->Cell(20,3,utf8_decode('TE'),'LBR',1,'C',true);
-
+        $pdf->Cell(20,3,utf8_decode('TE'),'LBR',1,'C',true);    
         $carga_academica = DB::table('eva_carga_academica')
             ->join('gnral_materias','gnral_materias.id_materia','=','eva_carga_academica.id_materia')
             ->join('eva_tipo_curso','eva_tipo_curso.id_tipo_curso','=','eva_carga_academica.id_tipo_curso')
@@ -157,7 +116,6 @@ class Cal_pdf_acta_dualController extends Controller
 
             $materia_promedio=DB::selectOne('SELECT SUM(calificacion) suma FROM `cal_evaluaciones` WHERE `id_carga_academica` ='.$materias->id_carga_academica.' and calificacion >=70');
             $materia_promedio=$materia_promedio->suma;
-
             $contar_unidades_pasadas=DB::selectOne('SELECT count(calificacion) suma FROM `cal_evaluaciones` WHERE `id_carga_academica` = '.$materias->id_carga_academica.' and calificacion >=70');
            $contar_unidades_pasadas=$contar_unidades_pasadas->suma;
            if($contar_unidades_pasadas ==$materias->unidades){
@@ -170,7 +128,6 @@ class Cal_pdf_acta_dualController extends Controller
              if($materias->id_tipo_curso ==1){
                  $te='O';
              }
-
                if($materias->id_tipo_curso ==2){
                    $te='O2';
                }
@@ -182,7 +139,6 @@ class Cal_pdf_acta_dualController extends Controller
                }
            }
            else{
-
                if($materia_promedio == 0){
                    $promedio=0;
                }
@@ -201,9 +157,6 @@ class Cal_pdf_acta_dualController extends Controller
                if($materias->id_tipo_curso ==4){
                    $te='EG';
                }
-
-
-
            }
             $datos_alumnos['promedio']=$promedio;
             $datos_alumnos['te']=$te;
@@ -228,29 +181,27 @@ class Cal_pdf_acta_dualController extends Controller
             }
             else{
                 $pdf->Cell(20, 10, utf8_decode($alumno['promedio']), 1, 0, 'C');
-
             }
             $pdf->Cell(20, 10, utf8_decode($alumno['te']), 1, 1, 'C');
         }
+        // Agregar una celda vacía al lado de la celda "Promedio Final"
+        $pdf->Cell(70, 10, '', 0, 0);
+        $pdf->Cell(70, 10, utf8_decode('PROMEDIO:'), 1, 0, 'R');
+        $pdf->SetFillColor(220, 220, 220); // Gris claro
+        $pdf->Cell(20, 10, utf8_decode($promedio_final), 1, 1, 'C',true);
       //dd($alumnos);
         $numero=87;
         foreach($alumnos as $alumno) {
-
-
             $pdf->SetXY(90,$numero);
             $pdf->MultiCell(70,30,utf8_decode($alumno['nombre_materia']),0, 'C');
             $numero+=10;
         }
-        $numero+=20;
+        $pdf->Ln(50);
+        $numero += 50; // Ajustar la posición vertical
         $pdf->Line(140, $numero, 195, $numero);
-        $pdf->SetXY(132,$numero);
-        $pdf->MultiCell(70,4,utf8_decode($profesor),0, 'C');
-
-
-
-
+        $pdf->SetXY(132, $numero);
+        $pdf->MultiCell(70, 4, utf8_decode($profesor), 0, 'C');
         $pdf->Output();
         exit();
     }
-
 }

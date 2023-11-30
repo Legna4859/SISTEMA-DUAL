@@ -5,52 +5,9 @@
     $ver_carga=session()->has('ver_carga')?session()->has('ver_carga'):false;
     $escolar = session()->has('escolar') ? session()->has('escolar') : false;
     $jefe_division = session()->has('jefe_division') ? session()->has('jefe_division') : false;
-
     ?>
 
     <main>
-        {{--  autorizar semestre al estudiante--}}
-        <div class="modal fade" id="modal_autorizar_estudiante" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Autorizar registro del estudiante</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="contenedor_autorizar_estudiante">
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="guardar_autorizar_estudiante"  class="btn btn-primary" >Aceptar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{--  actualizar semestre al estudiante--}}
-        <div class="modal fade" id="modal_actualizar_estudiante" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Modificar registro del estudiante</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="contenedor_actualizar_estudiante">
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="guardar_actualizar_estudiante"  class="btn btn-primary" >Aceptar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -60,15 +17,15 @@
                     </div>
                 </div>
             </div>
-        </div>
+</div>
         @if($usuario == 1)
             @if( $validaciones[0]->estado_validacion==3)
                 <div class=" col-md-5 col-md-offset-3">
                     <label class=" alert alert-danger"  data-toggle="tab" >{{ $validaciones[0]->descripcion }}</label>
                 </div>
             @endif
-            @if($validaciones[0]->estado_validacion==0 || $validaciones[0]->estado_validacion==3)
-                @if($creditoss == 1)
+            @if($validaciones[0]->estado_validacion == 0 || $validaciones[0]->estado_validacion == 3)
+            @if($creditoss == 1)
                     <div class=" col-md-5 col-md-offset-3">
                         <label class=" alert alert-danger"  data-toggle="tab" >El maximo  de creditos es de 38, verifica tu carga academica, gracias.</label>
                     </div>
@@ -95,6 +52,7 @@
                 @endif
             @endif
         @endif
+
         @if($usuario == 2)
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
@@ -296,7 +254,6 @@
                         <th style="text-align: center">GRUPO</th>
                         @if($validaciones[0]->estado_validacion==0 || $validaciones[0]->estado_validacion==3  || $validaciones[0]->estado_validacion==4)
                             <th style="text-align: center" >ELIMINAR</th>
-                            <th style="text-align: center" >MODIFICAR</th>
                         @endif
                     </tr>
                     </thead>
@@ -328,16 +285,10 @@
                                 <td style="text-align: center">{{$consulta1['nombre_status']}}</td>
                                 <td style="text-align: center">{{$consulta1['nombre_curso']}}</td>
                                 <td style="text-align: center">{{$consulta1['id_semestre']}}0{{$consulta1['grupo']}}</td>
-
                                 @if($validaciones[0]->estado_validacion==0 || $validaciones[0]->estado_validacion==3 || $validaciones[0]->estado_validacion==4)
                                     <th style="text-align: center">
                                         <a class="elimina" data-id_carga_academica="{{$consulta1['id_carga_academica']}}" >
                                             <span class="glyphicon glyphicon-trash em" aria-hidden="true"  style="color:crimson;"></span>
-                                        </a>
-                                    </th>
-                                    <th style="text-align: center">
-                                        <a href="/duales/checar_carga_academica/{{$consulta1['id_carga_academica']}}/edit" >
-                                            <span class="glyphicon glyphicon-cog em" aria-hidden="true" style="color: darkgreen;"></span>
                                         </a>
                                     </th>
                                 @endif
@@ -354,16 +305,6 @@
                             <td></td>
                             <td></td>
                         @endif
-                        @if($usuario==2)
-                            <td ></td>
-                            <td></td>
-                        @else
-                            @if($ver_carga==false)
-                                <td></td>
-                                <td></td>
-                            @endif
-                        @endif
-
 
                     </tr>
 

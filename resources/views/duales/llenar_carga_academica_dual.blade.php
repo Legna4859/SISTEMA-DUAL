@@ -122,30 +122,30 @@
             });
 
             $(".materias").click(function(){
-                var id_duales_actuales = $(this).data('id_duales_actuales');
-                //alert(id_duales_actuales);
-                $('#alumnM').val(id_duales_actuales);
-                $.get("/duales/alumnos/materias/"+id_duales_actuales,function(request)
-                {
-                    $("#contenedor_materias").html(request);
-                });
-                $('#modal_materias').modal('show');
+    var id_duales_actuales = $(this).data('id_duales_actuales');
+    $('#alumnM').val(id_duales_actuales);
+    
+    $.get("/duales/alumnos/materias/"+id_duales_actuales, function(request) {
+        $("#contenedor_materias").html(request);
+        });
 
-            });
+    $('#modal_materias').modal('show');
+});
 
-            $(".acepta").click(function ()
-            {
-               var arreglo_materias=[];
-                $('input[name="materia[]"]:checked').each(function (){
-                    arreglo_materias[arreglo_materias.length] = $(this).val();
-                });
-                $("#materias").val(arreglo_materias);
+$(".acepta").click(function () {
+    var arreglo_materias = [];
+    
+    $('input[name="materia[]"]:checked').each(function () {
+        arreglo_materias.push($(this).val());
+    });
+    
+    $("#materias").val(arreglo_materias);
 
-                $.post("/duales/agrega/materias_alumnos",$("#form_ver_materias").serialize(),function (request){
-                    window.location.href='/duales/llenar_carga_academica_dual';
-                    $('#modal_materias').modal(hide);
-                });
-            });
+    $.post("/duales/agrega/materias_alumnos", $("#form_ver_materias").serialize(), function (request) {
+        window.location.href='/duales/llenar_carga_academica_dual';
+        $('#modal_materias').modal('hide');
+    });
+});
 
         });
     </script>

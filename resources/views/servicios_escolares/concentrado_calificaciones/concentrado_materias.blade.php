@@ -143,7 +143,6 @@
                                             @if($calificacion['promedio'] < 70)
                                                 <td style="background: red; color: white;text-align: center;">N.A.</td>
                                                 @else
-
                                             <td style="text-align: center;">{{$calificacion['promedio']}}</td>
                                             @endif
                                             <td style="text-align: center;">{{$calificacion['te']}}</td>

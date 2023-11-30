@@ -124,7 +124,6 @@
                             <input type="hidden" id="materias" name="materias" value="">
                             <div class="row">
                                 <div id="contenedor_materias">
-
                                 </div>
                             </div>
                         </div>
@@ -135,36 +134,28 @@
                 </div>
             </div>
         </form>
-
     </main>
 
     <script>
         $(document).ready(function() {
-
             $('#paginar_table').DataTable();
-
             $('#paginar_tabla').DataTable();
-
             $("#paginar_table").on('click', '.agrega', function () {
                 var id_alumno = $(this).data('id');
                 //alert(id_alumno);
                 $('#alumno').val(id_alumno);
                 $('#modal_agrega').modal('show');
             });
-
             $("#paginar_tabla").on('click', '.elimina', function () {
                 var id_duales_actuales=$(this).data('id_alumno');
                 //alert(id_duales_actuales);
                 $('#eliminar_alumno').val(id_duales_actuales);
                 $('#modal_elimina').modal('show');
-
             });
-
             $("#confirma_agrega").click(function(event){
                 var id_alumno = $("#id_alumno").val();
                 $("#form_alumno_crea").submit();
             });
-
             $("#confirma_elimina").click(function(event){
                 var eliminar_alumno = $("#eliminar_alumno").val()
                // alert(eliminar_alumno);

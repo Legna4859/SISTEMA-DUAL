@@ -1,3 +1,14 @@
+@if($estado_alumno->estado_validacion == 8)
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 style="text-align: center">La carga academica ha sido autorizada no puede hacer modificaciones</h3>
+            </div>
+        </div>
+    </div>
+</div>
+@else
 <input type="hidden" id="id_duales_actuales" name="id_duales_actuales" value="{{$id_duales_actuales}}">
 @foreach($reticulas as $reti)
     <div class="panel-group col-md-10 col-md-offset-1" id="accordion" style="text-align: center">
@@ -34,24 +45,26 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                    
                                         @foreach($semes["materias"] as $materias)
-                                                <?php $bandera=false; ?>
-                                            <tr>
-                                                <td style="text-align: center">
-                                                    @foreach($materias_alumnos_duales as $ma_al_du)
-                                                        @if($ma_al_du->id_materia==$materias["id_materia"])
-                                                                <?php $bandera=true ?>
-                                                        @endif
-                                                    @endforeach
-                                                    @if($bandera)
-                                                        <input type="checkbox" checked="checked" name="materia[]" id="{{ $materias["id_materia"]}}" value="{{ $materias["id_materia"]}}">
-                                                    @else($bandera == null)
-                                                        <input type="checkbox" name="materia[]" id="{{ $materias["id_materia"]}}" value="{{ $materias["id_materia"]}}">
-                                                    @endif
-                                                </td>
-                                                <td style="text-align: center">{{ $materias["materia"]}}</td>
-                                                <td style="text-align: center">{{ $materias["clave"] }}</td>
-                                            </tr>
+                                        <?php $bandera=false; ?>
+                                        <tr>
+                                          <td>
+                                            @foreach($materias_alumnos_duales as $ma_al_du)
+                                              @if($ma_al_du->id_materia==$materias["id_materia"])
+                                                <?php $bandera=true ?>
+                                              @endif
+
+                                            @endforeach
+                                            @if($bandera)
+                                            <input type="checkbox" checked="checked" name="materia[]" id="{{ $materias["id_materia"]}}" value="{{ $materias["id_materia"]}}">
+                                            @else
+                                            <input type="checkbox" name="materia[]" id="{{ $materias["id_materia"]}}" value="{{ $materias["id_materia"]}}">
+                                            @endif
+                                          </td>
+                                          <td>{{ $materias["materia"]}}</td>
+                                          <td>{{ $materias["clave"] }}</td>
+                                        </tr>
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -65,4 +78,5 @@
         </div>
     </div>
 @endforeach
+@endif
 

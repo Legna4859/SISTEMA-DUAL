@@ -8,7 +8,6 @@
                     <h3 class="panel-title text-center">CONCENTRADO DE CALIFICACIONES DUALES <br> {{$nombre_carrera}}</h3>
                     <h5 class="panel-title text-center">(SEMESTRES)</h5>
                 </div>
-
             </div>
         </div>
     </div>
@@ -20,7 +19,8 @@
                 <div class="panel-heading" style="text-align: center">
                 <h3>{{$grupo->id_semestre}}0{{$grupo->grupo}}</h3><br>
                 <button type="button" class="btn" 
-                onclick="window.open('{{ url('/duales/concentrado_calificaciones_duales/materias/'.$grupo->id_carrera."/".$grupo->id_semestre."/".$grupo->grupo ) }}')" style="background:crimson;color:whitesmoke">
+                onclick="window.open('{{ url('/duales/concentrado_calificaciones_duales/materias/'.$grupo->id_carrera."/".$grupo->id_semestre."/".$grupo->grupo ) }}')" 
+                style="background:crimson;color:whitesmoke;border-radius: 35px;">
                 Mostrar Materias <span class="glyphicon glyphicon-level-up"></span>
                 </button>
             </div>

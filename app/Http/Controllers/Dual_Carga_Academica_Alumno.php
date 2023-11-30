@@ -32,10 +32,9 @@ class Dual_Carga_Academica_Alumno extends Controller
               AND gnral_alumnos.id_carrera = ' . $id_carrera . '
         GROUP BY gnral_alumnos.id_alumno, gnral_alumnos.nombre, gnral_alumnos.apaterno, gnral_alumnos.amaterno');
 
-        $materias_alumnos_duales = DB::select('SELECT gnral_materias_perfiles.id_materia_perfil, gnral_materias.id_materia, gnral_materias.nombre
-            FROM gnral_materias_perfiles, gnral_reticulas, gnral_materias
-            WHERE gnral_materias_perfiles.id_materia = gnral_materias.id_materia
-            AND gnral_materias.id_reticula = gnral_reticulas.id_reticula
+        $materias_alumnos_duales = DB::select('SELECT gnral_materias.id_materia, gnral_materias.nombre
+            FROM gnral_reticulas, gnral_materias
+            WHERE gnral_materias.id_reticula = gnral_reticulas.id_reticula
             AND gnral_reticulas.id_carrera =' . $id_carrera . '');
 
 
@@ -91,41 +90,4 @@ class Dual_Carga_Academica_Alumno extends Controller
         return view('duales.llenar_carga_academica_dual', compact('plantillas','materias_alumnos_duales'))->with('reticulas', $datos_reticulas);
     }
 
-    public function agrega_materias(Request $request)
-    {
-        //$lugar=Session::get('lugar');
-        $id_carrera=Session::get('carrera');
-        $materias_alumnos_duales=DB::select('select gnral_materias_perfiles.id_materia_perfil, gnral_materias.id_materia, gnral_materias.nombre
-            FROM gnral_materias_perfiles, gnral_reticulas, gnral_materias
-            WHERE gnral_materias_perfiles.id_materia = gnral_materias.id_materia
-            AND gnral_materias.id_reticula = gnral_reticulas.id_reticula
-            AND gnral_reticulas.id_carrera ='.$id_carrera.'');
-
-        $arr_mate=(explode(',', $request->get('materias')));
-        $ciclo=count($arr_mate);
-
-        for ($i=0; $i < $ciclo; $i++)
-        {
-            $mate_alum = DB::selectOne('select gnral_materias_perfiles.id_materia_perfil from 
-                gnral_materias_perfiles WHERE gnral_materias_perfiles.id_materia='.$arr_mate[$i].' ');
-            if ($mate_alum==null)
-            {
-                $materias = array(
-                    'id_materia' => $arr_mate[$i],
-                    'mostrar' => 1
-                );
-                $agrega_materia=Gnral_Materias_Perfiles::create($materias);
-            }
-            else
-            {
-                $mate_alum1=($mate_alum->id_materia_perfil);
-                $materias = array(
-                    'id_materia' => $arr_mate[$i],
-                    'mostrar' => 1
-                );
-                Gnral_Materias_Perfiles::find($mate_alum1)->update($materias);
-            }
-        }
-
-    }
 }

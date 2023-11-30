@@ -13,20 +13,15 @@ class PDF extends FPDF
     //CABECERA DE LA PAGINA
     function Header()
     {
-        $this->SetXY(42,10);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(131,5,utf8_decode('HISTORIAL ACADÉMICO'),0,1,'C');
-        $this->Cell(195,5,utf8_decode('FO- TESVB -38'),0,0,'C');
-        $this->SetXY(15,0);
-        $this->Image('img/tes.png', 177, 10, 25);
-        $this->Image('img/gem.png',14,5,25);
-        $this->SetFont('Arial','',8);
-        $this->Ln(5);
-        $this->Cell(32,20,utf8_decode(''),1,0,'R');
-        $this->Cell(131,20,utf8_decode(''),1,0,'R');
-        $this->Cell(32,20,utf8_decode(''),1,0,'R');
-
-        $this->Ln(18);
+         $this->Image('img/tes.PNG', 80 , 10, 50);
+        //$this->Image('img/gem.png',25,10,32);
+        $this->Ln(10);
+        $this->SetFont('Times', 'B', 10);
+        $this->Cell(0,50,utf8_decode('TECNOLÓGICO DE ESTUDIOS SUPERIORES DE VALLE DE BRAVO'),0,0,'C');
+        $this->Ln(1);
+        $this->Cell(0,60,utf8_decode('HISTORIAL ACADÉMICO'),0,0,'C');
+        $this->Ln(1);
+        $this->Cell(0,70,utf8_decode('FO-TESVB-3'),0,0,'C');
 
     }
     //PIE DE PAGINA
@@ -417,30 +412,39 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
         #Establecemos los márgenes izquierda, arriba y derecha:
         $pdf->SetMargins(10, 0, 10);
         $pdf->AddPage();
-        $pdf->SetFillColor(166,166,166);
-        $pdf->Ln(5);
-        $pdf->SetFont('Arial','','7');
+        $pdf->SetFillColor(166, 166, 166);
+        $pdf->Ln(20);
+        $pdf->SetFillColor(166, 166, 166);
+        $pdf->Ln(20);
+        $pdf->SetFont('Times','','7');
         $pdf->Cell(30,3,utf8_decode('No. Cuenta'),'LTR',0,'L');
         $pdf->Cell(90,3,utf8_decode('Nombre:'),'LTR',0,'L');
         $pdf->Cell(75,3,utf8_decode('Carrera:'),'LTR',1,'L');
-        $pdf->SetFont('Arial','B','7');
+        $pdf->SetFont('Times','B','7');
         $pdf->Cell(30,3,utf8_decode($no_cuenta),'LBR',0,'L');
         $pdf->Cell(90,3,utf8_decode($nombre),'LBR',0,'L');
         $pdf->Cell(75,3,utf8_decode($carrera),'LBR',1,'L');
-        $pdf->SetFont('Arial','','7');
-        $pdf->Cell(65,3,utf8_decode('Especialidad'),1,0,'L');
-        $pdf->Cell(65,3,utf8_decode('Plan:'),1,0,'L');
-        $pdf->Cell(65,3,utf8_decode('Fecha:'),1,1,'L');
-        $pdf->SetFont('Arial','B','7');
-        $y=$pdf->GetY();
-        $x=$pdf->GetX();
-        $pdf->MultiCell(65, 4,utf8_decode($especialidad),0);
-        $y2=$pdf->GetY();
-        $x2=$pdf->GetX();
-        $pdf->Setxy(75,37);
-        $pdf->MultiCell(65, 4, utf8_decode($plan),0);
-        $pdf->Setxy(140,37);
-        $pdf->MultiCell(65, 4, utf8_decode($fech),0);
+       $pdf->SetFont('Times', '', 7);
+        $pdf->Cell(65, 3, utf8_decode('Especialidad'), 1, 0, 'L');
+        $pdf->Cell(65, 3, utf8_decode('Plan:'), 1, 0, 'L');
+        $pdf->Cell(65, 3, utf8_decode('Fecha:'), 1, 1, 'L');
+
+        $pdf->SetFont('Times', 'B', 7);
+        $y = $pdf->GetY();
+        $x = $pdf->GetX();
+        $pdf->MultiCell(65, 4, utf8_decode($especialidad), 0);
+        $y2 = $pdf->GetY();
+        $x2 = $pdf->GetX();
+        $pdf->SetXY(75, $y);
+        $pdf->MultiCell(65, 4, utf8_decode($plan), 0);
+        $pdf->SetXY(140, $y);
+        $pdf->MultiCell(65, 4, utf8_decode($fech), 0);
+
+        $y3 = $y2 - $y;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(65, $y3, utf8_decode(''), 1, 0, 'L');
+        $pdf->Cell(65, $y3, utf8_decode(''), 1, 0, 'L');
+        $pdf->Cell(65, $y3, utf8_decode(''), 1, 0, 'L');
 
         $y3=$y2-$y;
         $pdf->Setxy($x,$y);
@@ -451,7 +455,7 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
         //$pdf->Cell(65,3,utf8_decode($plan),'LBR',0,'L');
         //$pdf->Cell(65,3,utf8_decode($fech),'LBR',1,'L');
         $pdf->Setxy($x2,$y2);
-        $pdf->SetFont('Arial','B','7');
+        $pdf->SetFont('Times','B','7');
         $pdf->Cell(8,4,utf8_decode('Sem.'),1,0,'C');
         $pdf->Cell(18,4,utf8_decode('Clave'),1,0,'C');
         $pdf->Cell(100,4,utf8_decode('Nombre de la Materia'),1,0,'C');
@@ -462,12 +466,12 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
         $pdf->Cell(8,4,utf8_decode('Año'),1,0,'C');
         $pdf->Cell(17,4,utf8_decode('Fech. Esp.'),1,1,'C');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         foreach($materias_actualizadas as $alumno) {
             $pdf->Cell(8, 4, utf8_decode($alumno['id_semestre']), 1, 0, 'C');
             $pdf->Cell(18, 4, utf8_decode($alumno['clave']), 1, 0, 'C');
 
-            $pdf->Cell(100, 4, utf8_decode($alumno['nombre_materia']), 1, 0, 'L');
+            $pdf->Cell(100, 4, utf8_decode($alumno['nombre_materia']), 1, 0, 'C');
 
             $pdf->Cell(8, 4, utf8_decode($alumno['creditos']), 1, 0, 'C');
             if($alumno['promedio']  <70 )
@@ -495,7 +499,7 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
             $pdf->Cell(8, 4, utf8_decode('9'), 1, 0, 'C');
             $pdf->Cell(18, 4, utf8_decode('RES-0001'), 1, 0, 'C');
 
-            $pdf->Cell(100, 4, utf8_decode('RESIDENCIA PROFESIONAL'), 1, 0, 'L');
+            $pdf->Cell(100, 4, utf8_decode('RESIDENCIA PROFESIONAL'), 1, 0, 'C');
 
             //$pdf->Cell(8, 4, utf8_decode('10'), 1, 0, 'C');
             if($datos_residencia->calificacion < 70)
@@ -526,7 +530,7 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
             $pdf->Cell(8, 4, utf8_decode('9'), 1, 0, 'C');
             $pdf->Cell(18, 4, utf8_decode('SSC-0001'), 1, 0, 'C');
 
-            $pdf->Cell(100, 4, utf8_decode('SERVICIO SOCIAL'), 1, 0, 'L');
+            $pdf->Cell(100, 4, utf8_decode('SERVICIO SOCIAL'), 1, 0, 'C');
 
 
             if($datos_servicio->calificacion < 70){
@@ -550,7 +554,7 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
             $pdf->Cell(8, 4, utf8_decode('9'), 1, 0, 'C');
             $pdf->Cell(18, 4, utf8_decode('ACC-0001'), 1, 0, 'C');
 
-            $pdf->Cell(100, 4, utf8_decode('ACTIVIDADES COMPLEMENTARIAS'), 1, 0, 'L');
+            $pdf->Cell(100, 4, utf8_decode('ACTIVIDADES COMPLEMENTARIAS'), 1, 0, 'C');
 
             $pdf->Cell(8, 4, utf8_decode('5'), 1, 0, 'C');
             $pdf->Cell(8, 4, utf8_decode('ACA'), 1, 0, 'C');
@@ -559,78 +563,78 @@ gnral_periodos.siglas,gnral_periodos.id_periodo from eva_validacion_de_cargas,ev
             $pdf->Cell(8, 4, utf8_decode(''), 1, 0, 'C');
             $pdf->Cell(17, 4, utf8_decode(''), 1, 1, 'C');
         }
-        $pdf->SetFont('Arial','B','6');
+        $pdf->SetFont('Times','B','6');
         $pdf->Cell(126, 4, utf8_decode('Totales:'), 0, 0, 'R');
         $pdf->Cell(8, 4, utf8_decode($contar_creditos), 1, 0, 'C');
         $pdf->Cell(8, 4, utf8_decode($promedio_f), 1, 1, 'C');
         $pdf->Ln(5);
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('O'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Normal Ordinario'), 1, 0, 'L');
         $pdf->Cell(48, 3, utf8_decode(''), 0, 0, 'C');
-        $pdf->SetFont('Arial','B','11');
+        $pdf->SetFont('Times','B','11');
         $pdf->Cell(48, 3, utf8_decode('A T E N T A M E N T E '), 0, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('R'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Normal Regularización'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('E'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Normal Extraordinario'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('O2'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Repetición Ordinario'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('R2'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Repetición Regularización'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('EE'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Examen Especial'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('CG'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Examen Global'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('ESC'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Evaluación Sumativa de Complementación'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('ESC2'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Evaluación Sumativa de Complementación 2'), 1, 0, 'L');
         $pdf->Cell(35, 3, utf8_decode(''), 0, 0, 'C');
-        $pdf->SetFont('Arial','B','10');
+        $pdf->SetFont('Times','B','10');
         $pdf->Cell(56, 3, utf8_decode(' __________________________________'), 0, 1, 'L');
 
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('CR'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso de Repetición'), 1, 1, 'L');
 
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('CE'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Curso Especial'), 1, 0, 'L');
         $pdf->Cell(35, 3, utf8_decode(''), 0, 0, 'C');
-        $pdf->SetFont('Arial','B','11');
+        $pdf->SetFont('Times','B','11');
         $pdf->Cell(56, 3, utf8_decode('L. EN C. ROMULO ESQUIVEL REYES'), 0, 1, 'L');
 
-        $pdf->SetFont('Arial','','6');
+        $pdf->SetFont('Times','','6');
         $pdf->Cell(12, 3, utf8_decode(''), 0, 0, 'C');
         $pdf->Cell(8, 3, utf8_decode('ACA'), 1, 0, 'L');
         $pdf->Cell(55, 3, utf8_decode('Actividad Complementaria Acreditada'), 1, 1, 'L');

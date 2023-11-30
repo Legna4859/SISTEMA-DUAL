@@ -22,13 +22,11 @@ class Dual_Mentor_Calificaciones extends Controller
         //checar si el periodo esta activo
         $periodo_actual = DB::selectOne('SELECT *from gnral_periodos WHERE  estado = 1');
         $id_periodo_actual=$periodo_actual->id_periodo;
-
         if( $periodo == $id_periodo_actual ){
             $periodo_activo=1;
         }else{
             $periodo_activo=0;
         }
-
         $mentores_duales = DB::selectOne('SELECT gnral_personales.id_personal FROM gnral_personales WHERE gnral_personales.id_personal = gnral_personales.id_personal AND gnral_personales.tipo_usuario = '.$usuario.' ');
 
         /*$datos_registros = DB::select('SELECT eva_validacion_de_cargas.id, eva_validacion_de_cargas.id_alumno,gnral_alumnos.cuenta,gnral_alumnos.nombre, gnral_alumnos.apaterno,gnral_alumnos.amaterno,gnral_personales.nombre as profesor,abreviaciones.titulo, cal_duales_actuales.*
