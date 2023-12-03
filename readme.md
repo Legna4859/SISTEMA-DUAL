@@ -68,5 +68,5 @@ info@spartner.nl
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel excel! The contribution guide can be found in the [Laravel Excel documentation]([http://laravel.com/docs/contribution](https://docs.laravel-excel.com/3.1/getting-started/contributing.html)https://docs.laravel-excel.com/3.1/getting-started/contributing.htmls).
+Thank you for considering contributing to the Laravel excel! The contribution guide can be found in the [Laravel Excel documentation](https://docs.laravel-excel.com/3.1/getting-started/contributing.html).
 
