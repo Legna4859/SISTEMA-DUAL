@@ -1,4 +1,5 @@
 Proyecto TESVB "Implementación Web Para El Módulo De Calificaciones Duales En El SGI Del TESVB"
+
 Ing. Angel Yair Rebollar Lopez
 
 
@@ -39,7 +40,7 @@ Documentation for the framework can be found on the [Laravel website]([http://la
 
 ## License
 
-##MIT
+## MIT
 
 Our software is open source and licensed under the MIT license
 
