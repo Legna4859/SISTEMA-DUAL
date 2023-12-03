@@ -26,7 +26,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 Laravel Excel está destinado a ser la hoja de PhpSpreadsheet con sabor a Laravel: un envoltorio simple, pero elegante alrededor de PhpSpreadsheet con el objetivo de simplificar exportaciones e importaciones.
 
-Características de Laravel Excel
+## Características de Laravel Excel
 
     Exportar fácilmente colecciones a Excel.
     Exportar consultas con chunking automático para un mejor rendimiento.
@@ -36,7 +36,7 @@ Características de Laravel Excel
     Lea el archivo Excel en trozos.
     Maneja las inserciones de importación en lotes.
 
-Documentation for the framework can be found on the [Laravel website]([http://laravel.com/doc](https://docs.laravel-excel.com/3.1/getting-started/)https://docs.laravel-excel.com/3.1/getting-started/s).
+Documentation for the framework can be found on the [Laravel Excel website](https://docs.laravel-excel.com/3.1/getting-started/)https://docs.laravel-excel.com/3.1/getting-started/s).
 
 ## License
 
